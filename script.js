@@ -30,22 +30,22 @@ class FallingFlowers {
         const flower = document.createElement('div');
         flower.className = 'falling-flower';
         flower.textContent = this.flowers[Math.floor(Math.random() * this.flowers.length)];
-        
+
         // Random starting position
         const startX = Math.random() * window.innerWidth;
         flower.style.left = `${startX}px`;
-        
+
         // Random size
         const size = 0.8 + Math.random() * 1.2;
         flower.style.fontSize = `${size}rem`;
-        
+
         // Random duration
         const duration = 6 + Math.random() * 6;
         flower.style.animationDuration = `${duration}s`;
-        
+
         // Random opacity
         flower.style.opacity = 0.4 + Math.random() * 0.5;
-        
+
         // Add sway effect with inline style
         const swayAmount = 20 + Math.random() * 40;
         const swayDuration = 2 + Math.random() * 2;
@@ -53,9 +53,9 @@ class FallingFlowers {
             fall ${duration}s linear forwards,
             sway ${swayDuration}s ease-in-out infinite
         `;
-        
+
         this.container.appendChild(flower);
-        
+
         // Remove flower after animation ends
         setTimeout(() => {
             if (flower.parentNode) {
@@ -149,7 +149,7 @@ class SmoothScroll {
                 e.preventDefault();
                 const targetId = anchor.getAttribute('href');
                 const targetElement = document.querySelector(targetId);
-                
+
                 if (targetElement) {
                     targetElement.scrollIntoView({
                         behavior: 'smooth',
@@ -207,9 +207,9 @@ class CursorEffect {
                 z-index: 9999;
                 animation: sparkle 1s ease-out forwards;
             `;
-            
+
             document.body.appendChild(sparkle);
-            
+
             setTimeout(() => sparkle.remove(), 1000);
         }
     }
@@ -246,27 +246,142 @@ sparkleStyle.textContent = `
 `;
 document.head.appendChild(sparkleStyle);
 
+// Music Player Controller with Autoplay
+class MusicPlayer {
+    constructor() {
+        this.audio = document.getElementById('bg-music');
+        this.button = document.getElementById('music-toggle');
+        this.icon = this.button.querySelector('.music-icon');
+        this.text = this.button.querySelector('.music-text');
+        this.isPlaying = false;
+        this.hasInteracted = false;
+        this.init();
+    }
+
+    init() {
+        this.button.addEventListener('click', () => this.toggle());
+
+        // Update button state when audio ends or pauses
+        this.audio.addEventListener('play', () => this.updateUI(true));
+        this.audio.addEventListener('pause', () => this.updateUI(false));
+        this.audio.addEventListener('ended', () => this.updateUI(false));
+
+        // Handle audio loading errors
+        this.audio.addEventListener('error', () => {
+            console.log('🎵 Tambahkan file music.mp3 ke folder untuk memainkan musik!');
+            this.text.textContent = 'No Music';
+        });
+
+        // Attempt autoplay on page load
+        this.attemptAutoplay();
+
+        // Fallback: Play on first user interaction (for browsers that block autoplay)
+        this.setupFirstInteractionPlay();
+    }
+
+    attemptAutoplay() {
+        // Try to autoplay immediately
+        const playPromise = this.audio.play();
+
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                // Autoplay started successfully
+                console.log('🎵 Musik dimulai otomatis!');
+                this.hasInteracted = true;
+            }).catch(error => {
+                // Autoplay was prevented, wait for user interaction
+                console.log('🎵 Autoplay diblokir browser. Musik akan dimainkan saat klik pertama.');
+                this.showAutoplayHint();
+            });
+        }
+    }
+
+    setupFirstInteractionPlay() {
+        const startMusicOnInteraction = (e) => {
+            if (!this.hasInteracted && this.audio.paused) {
+                this.audio.play().then(() => {
+                    this.hasInteracted = true;
+                    this.hideAutoplayHint();
+                }).catch(err => {
+                    console.log('🎵 Gagal memainkan musik:', err.message);
+                });
+            }
+            // Remove listeners after first interaction
+            if (this.hasInteracted) {
+                document.removeEventListener('click', startMusicOnInteraction);
+                document.removeEventListener('touchstart', startMusicOnInteraction);
+                document.removeEventListener('keydown', startMusicOnInteraction);
+                document.removeEventListener('scroll', startMusicOnInteraction);
+            }
+        };
+
+        // Listen for any user interaction
+        document.addEventListener('click', startMusicOnInteraction);
+        document.addEventListener('touchstart', startMusicOnInteraction);
+        document.addEventListener('keydown', startMusicOnInteraction);
+        document.addEventListener('scroll', startMusicOnInteraction, { once: true });
+    }
+
+    showAutoplayHint() {
+        // Show a subtle hint that music will play on interaction
+        this.button.classList.add('waiting');
+        this.text.textContent = 'Klik untuk musik';
+    }
+
+    hideAutoplayHint() {
+        this.button.classList.remove('waiting');
+    }
+
+    toggle() {
+        this.hasInteracted = true;
+        if (this.audio.paused) {
+            this.audio.play().catch(e => {
+                console.log('🎵 Musik tidak bisa dimainkan:', e.message);
+                alert('Tambahkan file "music.mp3" ke folder yang sama dengan index.html untuk memainkan musik! 🎵');
+            });
+        } else {
+            this.audio.pause();
+        }
+    }
+
+    updateUI(playing) {
+        this.isPlaying = playing;
+        if (playing) {
+            this.button.classList.add('playing');
+            this.icon.textContent = '🎶';
+            this.text.textContent = 'Pause';
+        } else {
+            this.button.classList.remove('playing');
+            this.icon.textContent = '🎵';
+            this.text.textContent = 'Play';
+        }
+    }
+}
+
 // Initialize everything when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize falling flowers
     const fallingFlowers = new FallingFlowers();
-    
+
     // Initialize section animations
     new SectionAnimator();
-    
+
     // Initialize smooth scroll
     new SmoothScroll();
-    
+
     // Initialize star parallax
     new StarParallax();
-    
+
     // Initialize cursor effect
     new CursorEffect();
-    
+
+    // Initialize music player
+    new MusicPlayer();
+
     // Console message
     console.log('🌸 Selamat Ulang Tahun Sekar! 🌸');
     console.log('🌷 Website ini dibuat dengan penuh cinta 💕');
-    
+
     // Optional: Reduce flowers on mobile for performance
     if (window.innerWidth < 768) {
         // Reduce flower frequency on mobile
@@ -281,11 +396,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Easter egg: Click on main title to trigger flower burst
 document.addEventListener('click', (e) => {
-    if (e.target.classList.contains('opening-title') || 
+    if (e.target.classList.contains('opening-title') ||
         e.target.classList.contains('name-highlight')) {
         const container = document.getElementById('falling-flowers');
         const flowers = ['🌸', '🌷', '🌼', '🌺', '💮', '🏵️', '💐', '🌹'];
-        
+
         for (let i = 0; i < 20; i++) {
             setTimeout(() => {
                 const flower = document.createElement('div');
@@ -296,7 +411,7 @@ document.addEventListener('click', (e) => {
                 flower.style.fontSize = `${1 + Math.random() * 1.5}rem`;
                 flower.style.animation = `fall ${4 + Math.random() * 4}s linear forwards`;
                 container.appendChild(flower);
-                
+
                 setTimeout(() => flower.remove(), 8000);
             }, i * 50);
         }

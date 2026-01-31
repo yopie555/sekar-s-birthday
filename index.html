@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,12 +8,27 @@
     <meta name="description" content="Selamat Ulang Tahun Sekar - Taman Bunga di Malam Hari">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;600;700&family=Nunito:wght@400;500;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;600;700&family=Nunito:wght@400;500;600&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <!-- Falling Flowers Container -->
     <div id="falling-flowers"></div>
+
+    <!-- Background Music Player -->
+    <div id="music-player">
+        <audio id="bg-music" loop autoplay>
+            <source src="music.mp3" type="audio/mpeg">
+            <!-- Tambahkan file music.mp3 ke folder yang sama -->
+        </audio>
+        <button id="music-toggle" class="music-btn" title="Play/Pause Music">
+            <span class="music-icon">🎵</span>
+            <span class="music-text">Play</span>
+        </button>
+    </div>
 
     <!-- Section 1: Gerbang Taman (Opening) -->
     <section id="opening" class="section opening-section">
@@ -45,11 +61,11 @@
                     <span class="leaf">🌿</span>
                 </div>
                 <p class="greeting-message">
-                    Di hari yang istimewa ini, semoga semua mimpi-mimpimu bermekaran 
+                    Di hari yang istimewa ini, semoga semua mimpi-mimpimu bermekaran
                     seperti bunga-bunga di taman ini. 🌸
                 </p>
                 <p class="greeting-message">
-                    Semoga tahun ini membawa lebih banyak kebahagiaan, kesehatan, 
+                    Semoga tahun ini membawa lebih banyak kebahagiaan, kesehatan,
                     dan kesuksesan untukmu. Kamu layak mendapatkan semua yang terbaik! 💖
                 </p>
                 <div class="flower-divider">
@@ -86,38 +102,6 @@
         </div>
     </section>
 
-    <!-- Section 4: Sudut Taman (Mini Gallery) -->
-    <section id="gallery" class="section gallery-section">
-        <h2 class="section-title">📸 Sudut Taman Kenangan 📸</h2>
-        <div class="gallery-grid">
-            <div class="photo-frame petal-frame">
-                <div class="photo-placeholder">
-                    <span>🌸</span>
-                    <p>Foto 1</p>
-                </div>
-            </div>
-            <div class="photo-frame circle-frame">
-                <div class="photo-placeholder">
-                    <span>🌷</span>
-                    <p>Foto 2</p>
-                </div>
-            </div>
-            <div class="photo-frame petal-frame">
-                <div class="photo-placeholder">
-                    <span>🌼</span>
-                    <p>Foto 3</p>
-                </div>
-            </div>
-            <div class="photo-frame circle-frame">
-                <div class="photo-placeholder">
-                    <span>🌺</span>
-                    <p>Foto 4</p>
-                </div>
-            </div>
-        </div>
-        <p class="gallery-note">✨ Hover untuk lihat bunga mekar ✨</p>
-    </section>
-
     <!-- Section 5: Pesan di Bangku Taman (Closing) -->
     <section id="closing" class="section closing-section">
         <div class="bench-card">
@@ -132,12 +116,12 @@
                     Sekar yang tersayang,
                 </p>
                 <p>
-                    Semoga di umur yang baru ini, kamu selalu dikelilingi 
-                    oleh orang-orang yang menyayangimu. Semoga setiap langkahmu 
+                    Semoga di umur yang baru ini, kamu selalu dikelilingi
+                    oleh orang-orang yang menyayangimu. Semoga setiap langkahmu
                     dipenuhi dengan kebahagiaan dan setiap impianmu menjadi kenyataan.
                 </p>
                 <p>
-                    Tetap jadi bunga yang indah dan menginspirasi banyak orang. 
+                    Tetap jadi bunga yang indah dan menginspirasi banyak orang.
                     Aku bangga mengenalmu! 🌸💖
                 </p>
             </div>
@@ -160,4 +144,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>
